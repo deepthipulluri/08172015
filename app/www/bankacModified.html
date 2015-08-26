@@ -1,0 +1,230 @@
+<html>
+<head></head>
+
+<body>
+<script>
+
+	window.Intuit = (function() {
+		
+		function inherits(parent, child){  //function to setup prototype inheritence.
+			child.prototype = Object.create(parent.prototype);
+			child.prototype.constructor = child;
+			child.prototype._super = parent;
+		}
+
+		var intuit = {};
+		
+		function extend(superEntity,options){ 
+
+		 	//internal extend function which calls inherits to set prototype chain,calls the super constructor to set the propertys, and also for the subclass it creates an extend function closure so that the entity could now be extended
+
+		 	var defaults = {};
+
+		 	if(options && options.defaults){
+		 		defaults = options.defaults; // instantiating the defaults 
+		 	}
+
+			function Entity(options){
+				if(!options){
+					options = {};
+				}
+				for(var prop in defaults){
+					if(!options.hasOwnProperty(prop)){ //if a property doesnt have a value then set default
+						options[prop] = defaults[prop];
+					}
+				}
+				this.attributes = options;
+				Entity.prototype._super.call(this,options);  //calls super constructor with options to be processed 
+			}
+
+			inherits(superEntity,Entity); // sets the prototype chanin
+
+			for (var prop in options){
+				Entity.prototype[prop] = options[prop];
+			}  	// think of these as setters of props in the child function object
+			Entity.extend = function(options){
+				return extend(Entity,options) // extend closure so that another entity can extend this entity
+			};
+			return Entity;
+
+		}
+
+		Model = function(options){
+			this.attributes = options || {};
+		};
+		inherits(Events,collection);
+		
+		Model.prototype.get = function(propName){
+			return this.attributes[propName];
+		};
+
+
+		Model.prototype.set = function(propName,propvalue){
+			this.attributes[propName] = propvalue;
+		};
+
+		Model.extend = function(options){
+			return extend(Model,options);
+		};
+
+
+		function collection(options){
+			this.models = options || [];
+		};
+
+		inherits(Events,collection);
+
+		collection.prototype.add = function(model){
+			this.models.push(model);
+		};
+
+		collection.prototype.forEach = function(fn) {
+			this.models.forEach(fn);
+		};
+
+		collection.extend = function (options){
+			return extend(collection,options);
+		};
+
+		intuit.collection = collection;
+
+		intuit.Model = Model;
+
+		function Events(){
+
+		};
+
+		Events.prototype.trigger = function(eventName, eventData) {
+			if (this.events && this.events[eventName]) {
+				this.events[eventName].forEach(function (eventHandler) {
+					eventHandler(eventData);
+				});
+			}
+		};
+		
+		Events.prototype.on = function(eventName, eventHandler) {
+			if (!this.events) {
+				this.events = {};
+			}
+			if (!this.events[eventName]) {
+				this.events[eventName] = [];
+			}
+			this.events[eventName].push(eventHandler);
+		};
+
+		return intuit;
+	
+	})();
+
+	var Account = Intuit.Model.extend({
+		defaults:{
+			id : "accountId",
+			balance : 123
+		},
+
+		getAccountbalance: function(){
+			return this.get("balance");
+		}
+
+		
+	});
+
+	Account.prototype.addTransaction = function(transAmount, type){
+			
+			if (type === "minus") {
+				 this.balance = this.balance - transAmount;
+			} else {
+				 this.balance = this.balance + transAmount;
+			}
+	} ;
+
+
+	var CheckingAccount = Account.extend ({
+		defaults:{
+			id: "default",
+			balance: 1000,
+			countTransactions : 0
+		},
+		getAccountbalance: function(){
+			return this.get("id")+ " "+ this.get("balance") + " "+ this.get("countTransactions");
+		}
+	});
+
+	var ChkAc = new CheckingAccount({
+			id: "DeepthiCheckingAC",
+			balance: 1000,
+			countTransactions : 2
+	});
+
+	console.log(ChkAc.getAccountbalance());
+
+	var SavingAccount = Account.extend ({
+		defaults:{
+			id: "defaultSave",
+			balance: 1000,
+			countTransactions : 0
+		},
+		getAccountbalance: function(){
+				return this.get("id")+ " "+ this.get("balance") + " "+ this.get("countTransactions");
+		},
+		addTransaction : function(amount,type){
+		if(type === "minus"){
+				if(this.get("countTransactions") >= 6) {
+					console.log ("Too many");
+				} else {
+					this.set("countTransactions", this.get("countTransactions")+1);
+					Account.prototype.addTransaction.call(this, amount, type);
+				}
+			} else {
+				Account.prototype.addTransaction.call(this, amount, type);
+			}
+		}
+		
+	});
+
+	var saving1Ac = new SavingAccount({
+			id: "DeepthiSavingAC",
+			balance: 1100,
+			countTransactions: 0
+	});
+
+	console.log(ChkAc.getAccountbalance());
+	console.log(saving1Ac.getAccountbalance());
+
+	saving1Ac.addTransaction(10,"minus");
+	saving1Ac.addTransaction(10,"minus");
+	saving1Ac.addTransaction(10,"minus");
+	saving1Ac.addTransaction(10,"minus");
+	saving1Ac.addTransaction(10,"minus");
+	saving1Ac.addTransaction(10,"minus");
+	console.log(saving1Ac.getAccountbalance());
+
+	saving1Ac.addTransaction(10,"minus");
+	saving1Ac.addTransaction(10,"minus");
+	console.log(saving1Ac.getAccountbalance());
+
+
+	var Accounts =  Intuit.collection.extend();
+
+	var saving2Ac = new SavingAccount({
+			id: "DeepthiSaving2AC",
+			balance: 1500,
+			countTransactions: 2
+	});
+	var saving3Ac = new SavingAccount({
+			id: "DeepthiSaving3AC",
+			balance: 2000,
+			countTransactions: 2
+	});
+
+	var savingAccounts = new Accounts ([saving1Ac,saving2Ac,saving3Ac]);
+
+	savingAccounts.forEach(function(saveAc){
+		console.log(saveAc.getAccountbalance());
+	});
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<html>
+
+<head></head>
+<body>
+	
+	<script>
+
+	"use strict";
+
+	var o = {};
+	o.name ="tom";
+	/*
+	Object.defineProperty(o,"firstName", {
+		enumerable: true, // it allows us to look up as for something in ..
+		configurable: true,
+		value: "Deepthi",
+		writable: false
+	});
+
+	console.dir(o);
+	//o.firstName = "bob" //returns error since writable is false
+
+	for (var prop in o){
+		console.log(prop); //lists out name and firstname properties of the object o since enumerable is true
+	}
+	*/
+
+	var _firstName;
+
+	Object.defineProperty(o,"firstName", {
+		enumerable: false, // it allows us to look up as for something in ..
+		configurable: false,
+		set: function(value){ //This allows us to do event handlers on these properties
+			console.log("set value to "+value);
+			this._firstName = value;
+		}
+		get: function(){
+			return this._firstName;
+		}
+	});
+
+	o.firstName = "Bob"; 
+	console.log(o.firstName);
+
+
+
+	</script>
+</body>
+</html>

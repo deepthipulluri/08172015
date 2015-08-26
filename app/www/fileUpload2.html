@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+	<style>
+
+	#drop-zone{
+		float:left;
+		width: 70px;
+		height:70px;
+		border: 3px dotted black;
+		box-sizing: border-box;
+	}
+
+	#drop-zone .active{
+		border: 3px dotted black;
+
+	}
+	</style>
+		<title></title>
+	</head>
+<body>
+
+	<form>
+		select file <input type="file" id="uploadFile" multiple=""/>
+		<button type="button">upload</button> 
+		<div>&nbsp;</div>
+		<progress id="uploadProgress" value="0" max="0"></progress>
+	</form>
+	
+
+	<script>
+	var uploadButton = document.getElementsByTagName("button")[0];
+
+
+	uploadButton.addEventListener("click",function(e){
+		
+		var fileInput= document.getElementById("uploadFile");
+
+		var fd = new FormData();
+		for(var x=0; x< fileInput.files.length; x++){
+			fd.append("file-" + x, fileInput.files[x])
+		}
+		var xhr = new XMLHttpRequest();
+		xhr.addEventListener("readystatechange", function(){
+			if(xhr.readyState === 1 &&  !xhr.status === 200){
+					console.log("error occured");
+			}
+
+			if(xhr.readyState === 4 && xhr.status === 200){
+					console.log(xhr.responseText);
+			}
+		});
+
+		xhr.upload.addEventListener("progress", function(e){
+			var uploadProgress = document.getElementById("uploadProgress");
+			uploadProgress.setAttribute("max",e.total);
+			uploadProgress.setAttribute("value",e.loaded);
+
+		});
+
+		//wire up on ready state change 
+
+		xhr.open("POST","api/upload");
+		xhr.send(fd);
+	});
+
+	</script>
+</body>
+
+</html>

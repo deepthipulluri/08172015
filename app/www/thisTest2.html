@@ -1,0 +1,21 @@
+<html>
+	<head>
+	</head>
+	<body>
+	<script>	
+	"use strict";
+	
+	function outer(){
+		var that = this;
+		function inner(){
+			console.log(that);
+	  	}
+		inner();
+	}
+
+	outer.call({id:3});
+	
+	</script>
+
+	</body>
+</html>

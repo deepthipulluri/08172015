@@ -1,0 +1,5 @@
+define({
+
+	url: "some-url"
+
+});

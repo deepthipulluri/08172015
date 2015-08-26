@@ -1,0 +1,203 @@
+<!-- array data
+
+it neesds 5 properties
+
+car
+make
+model
+year
+price
+color
+
+programattically build table of the above data using
+
+dom create
+placement
+
+header, body content,
+
+6th with edit
+show input fiels in the row
+change button to save and cancel
+save updates array
+-->
+
+
+
+<html>
+
+<head>
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<style>
+			th {
+				background-color: blue;
+				color: white;
+				padding: 15px;
+			}
+			td{
+				padding: 15px;
+				text-align: center;
+			}
+
+			tr:nth-child(even) {
+    			background: #CCCCCC;
+			}
+
+
+		</style>
+</head>
+
+<body>
+
+<div id="cars">
+
+	
+</div>
+
+<script>
+	var cars = [{make:"Toyota", model: "corolla", year: "2010",price:"20,000", color:"silver"},
+				{make:"Honda", model: "civic", year: "2011",price:"22,000", color:"red"},
+				{make:"Tesla", model: "roadster", year: "2012",price:"80,000", color:"blue"},
+				{make:"Ferrari", model: "sport", year: "2014",price:"234,000", color:"yellow"},
+				{make:"Mascerati", model: "coup", year: "2015",price:"340,000", color:"black"},
+				];
+
+	var tableElement =  $("<table class='mytableClass' id='carsTable' border=1>"); 
+	tableElement.append("<thead><th>Make</th><th>Model</th><th>Year</th><th>Price</th><th>Color</th><th>&nbsp;</th><th>&nbsp;</th</thead>");
+	
+
+	for (i = 0; i < cars.length; i++) { 
+		var tr = $("<tr>");
+		var td = $("<td>");
+		td.html(cars[i].make);
+		tr.append(td);
+		var td2 = $("<td>");
+		td2.html(cars[i].model);
+		tr.append(td2);
+		var td3 = $("<td>");
+		td3.html(cars[i].year);
+		tr.append(td3);
+		var td4 = $("<td>");
+		td4.html(cars[i].price);
+		tr.append(td4);
+		var td5 = $("<td>");
+		td5.html(cars[i].color);
+		tr.append(td5);
+		var td6 = $("<td>");
+		td6.html("<button class = 'edit' id='" + i + "'> Edit Me</button>");
+		tr.append(td6);		
+		tableElement.append(tr);
+	}
+
+	$("#cars").append(tableElement);
+
+
+	$(".edit").on("click",function(){
+		var id = this.id
+		var nearestTr = $("#"+id).closest("tr");
+				var tr = $("<tr>");
+		var td = $("<td>");
+		td.html("<input type='text' value='" + cars[id].make + "'/>");
+		tr.append(td);
+		var td2 = $("<td>");
+		td2.html("<input type='text' value='" + cars[id].model+ "'/>");
+		tr.append(td2);
+		var td3 = $("<td>");
+		td3.html("<input type='text' value='" + cars[id].year+ "'/>");
+		tr.append(td3);
+		var td4 = $("<td>");
+		td4.html("<input type='text' value='" +cars[id].price+ "'/>");
+		tr.append(td4);
+		var td5 = $("<td>");
+		td5.html("<input type='text' value='" +cars[id].color+ "'/>");
+		tr.append(td5);
+		var td6 = $("<td>");
+		td6.html("<button class='save' onclick = 'save(this)' id='save:"+id+"'> save</button>");
+		tr.append(td6);		
+		var td7 = $("<td>");
+		td7.html("<button class='reset' onclick = 'reset(this)' id='reset:"+id+"'> reset</button>");
+		tr.append(td7);		
+		nearestTr.replaceWith(tr);
+	});
+
+
+
+	function save(f){
+		console.log(arguments);
+		console.log("here");
+		var id = f.id;
+		var res = id.split(":");
+		var i = res[1];
+
+		var nearestTr = $(f.target).closest("tr");
+		var tds = nearestTr;
+		console.log(tds);
+		$(f.target).closest("tr").each(function(){  
+			cars[id].make = $(this).find('td').eq(0).text();
+		cars[id].model = $(this).find('td').eq(1).text();
+		cars[id].year = $(this).find('td').eq(2).text();
+		cars[id].price = $(this).find('td').eq(3).text();
+		cars[id].color = $(this).find('td').eq(4).text();
+    		//alert();
+    	});
+		
+		var tr = $("<tr>");
+		var td = $("<td>");
+		td.html(cars[i].make);
+		tr.append(td);
+		var td2 = $("<td>");
+		td2.html(cars[i].model);
+		tr.append(td2);
+		var td3 = $("<td>");
+		td3.html(cars[i].year);
+		tr.append(td3);
+		var td4 = $("<td>");
+		td4.html(cars[i].price);
+		tr.append(td4);
+		var td5 = $("<td>");
+		td5.html(cars[i].color);
+		tr.append(td5);
+		var td6 = $("<td>");
+		td6.html("<button class = 'edit' id='" + i + "'> Edit Me</button>");
+		tr.append(td6);		
+		nearestTr.replaceWith(tr);
+	}
+
+	function reset(f){
+
+		console.log("here");
+		var id = f.id;
+		var res = id.split(":");
+		var i = res[1];
+		console.log(i);
+		var nearestTr = $(f.target).closest("tr");
+		var tr = $("<tr>");
+		var td = $("<td>");
+		td.html(cars[i].make);
+		tr.append(td);
+		var td2 = $("<td>");
+		td2.html(cars[i].model);
+		tr.append(td2);
+		var td3 = $("<td>");
+		td3.html(cars[i].year);
+		tr.append(td3);
+		var td4 = $("<td>");
+		td4.html(cars[i].price);
+		tr.append(td4);
+		var td5 = $("<td>");
+		td5.html(cars[i].color);
+		tr.append(td5);
+		var td6 = $("<td>");
+		td6.html("<button class = 'edit' id='" + i + "'> Edit Me</button>");
+		tr.append(td6);		
+		nearestTr.replaceWith(tr);
+
+	}
+
+
+</script>
+
+
+</body>
+
+</html>

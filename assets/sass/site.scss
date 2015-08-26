@@ -1,0 +1,158 @@
+@import "themes/default";
+@import "themes/intuitFonts";
+
+$paddingAndMargin: 10px;
+
+.bold{
+	font-weight : bold;
+}
+
+.hoverFont{
+	font-size: 18px;
+}
+
+@mixin myFirstMixin ($fontWeight:bold, $fontFamily: arial, $fontSize:32){
+	font-weight: $fontWeight;
+	font-family: $fontFamily;
+	font-size: $fontSize;
+}
+
+@mixin myBordersMixin ($width:1px, $strength: solid, $color: red){
+	border : $width $strength $color;
+}
+
+
+body{
+	padding : $paddingAndMargin;
+	margin: 10px;
+	font-family : Helvetica;
+}
+
+img {
+	box-shadow: 0px 3px 3px 3px rgba(0,0,0,0.75);
+}
+
+img:hover {
+		@include myBordersMixin($strength: dotted, $color: red);
+}
+
+div{
+	audio{
+		margin : 10px;
+		border : 1px solid red;
+	}
+	font-family: $divFont;
+}
+
+p{
+	font-family: $pFont;
+}
+
+section {
+	&:focus{
+		background-color: #f9f9f9;
+	}
+
+	&:hover{
+		@extend .bold;
+		@extend .hoverFont;
+		background-color: #f9f9f9;
+	}
+	
+	> header{		
+		@extend .bold;
+		color: $pageHeaderColor;
+	}
+
+
+	> footer{
+		color: $pageFooterColor;
+		font-family: $footerFont;
+		font-size : 10px;
+	}
+
+}
+
+form{
+	background-color : PeachPuff;
+}
+
+label{
+	@include myFirstMixin($fontFamily:cursive);
+}
+
+iframe {
+	@include myBordersMixin($color: deepskyblue);
+}
+
+
+/***** Grid Style *****/
+
+.base-col {
+	float: left;
+	width: 15%;
+	box-sizing : border-box;
+	border: 1px dotted grey;
+}
+
+.container{
+	.row{
+		margin: 0;
+		padding: 0;
+		clear: both;
+
+// Intresting css **
+		&::after{
+			content: " ";
+			clear: both;
+			display: table;  // the clear both above is clearing the float for the previous row, but if we want to clear after the current 
+			                 // row this css puts some content after the current row, so we can clear the float after the current row.
+		}
+
+		.col-6{
+			@extend .base-col;
+			width: 90%;
+			text-align: center;
+			font-weight: bold;
+		}
+		.col-2{
+			@extend .base-col;
+			width:30%
+		}
+		.col-5{
+			@extend .base-col;
+			width: 75%;
+		}
+
+		.col-1{
+			@extend .base-col;
+			width: 15%;
+		}
+	
+		.headerRow{
+			background-color: yellow;
+		}
+		.dataRow{
+			background-color: blue;
+		}
+		.footerRow{
+			background-color:  #cccccc;
+		}
+	}
+}
+
+.pic{
+	-ms-transform: rotate(7deg); /* IE 9 */
+    -webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
+    transform: rotate(7deg);
+    
+}
+
+.pic:hover{
+ 	-webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+	@-moz-keyframes spin { 100% { -moz-transform: rotate(90deg); } }
+	@-webkit-keyframes spin { 100% { -webkit-transform: rotate(90deg); } }
+	@keyframes spin { 100% { -webkit-transform: rotate(90deg); transform:rotate(360deg); } }
+}

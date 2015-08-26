@@ -1,0 +1,101 @@
+.bold, section:hover, section > header {
+  font-weight: bold; }
+
+.hoverFont, section:hover {
+  font-size: 18px; }
+
+body {
+  padding: 10px;
+  margin: 10px;
+  font-family: Helvetica; }
+
+img {
+  box-shadow: 0px 3px 3px 3px rgba(0, 0, 0, 0.75); }
+
+img:hover {
+  border: 1px dotted red; }
+
+div {
+  font-family: sans-serif; }
+  div audio {
+    margin: 10px;
+    border: 1px solid red; }
+
+p {
+  font-family: Helvetica; }
+
+section:focus {
+  background-color: #f9f9f9; }
+section:hover {
+  background-color: #f9f9f9; }
+section > header {
+  color: deepskyblue; }
+section > footer {
+  color: seagreen;
+  font-family: courier;
+  font-size: 10px; }
+
+form {
+  background-color: PeachPuff; }
+
+label {
+  font-weight: bold;
+  font-family: cursive;
+  font-size: 32; }
+
+iframe {
+  border: 1px solid deepskyblue; }
+
+/***** Grid Style *****/
+.base-col, .container .row .col-6, .container .row .col-2, .container .row .col-5, .container .row .col-1 {
+  float: left;
+  width: 15%;
+  box-sizing: border-box;
+  border: 1px dotted grey; }
+
+.container .row {
+  margin: 0;
+  padding: 0;
+  clear: both; }
+  .container .row::after {
+    content: " ";
+    clear: both;
+    display: table; }
+  .container .row .col-6 {
+    width: 90%;
+    text-align: center;
+    font-weight: bold; }
+  .container .row .col-2 {
+    width: 30%; }
+  .container .row .col-5 {
+    width: 75%; }
+  .container .row .col-1 {
+    width: 15%; }
+  .container .row .headerRow {
+    background-color: yellow; }
+  .container .row .dataRow {
+    background-color: blue; }
+  .container .row .footerRow {
+    background-color: #cccccc; }
+
+.pic {
+  -ms-transform: rotate(7deg);
+  /* IE 9 */
+  -webkit-transform: rotate(7deg);
+  /* Chrome, Safari, Opera */
+  transform: rotate(7deg); }
+
+.pic:hover {
+  -webkit-animation: spin 4s linear infinite;
+  -moz-animation: spin 4s linear infinite;
+  animation: spin 4s linear infinite; }
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(90deg); } }
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(90deg); } }
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(360deg); } }

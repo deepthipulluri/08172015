@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<script src = "libs/dojo/dojo-config.js"></script>
+		<script src = "libs/dojo/dojo.js"></script>	
+	</head>
+	<body>
+	<table>
+		<tr>
+			<td>one</td>
+			<td>Two</td>
+			<td>Three</td>
+			<td><button id="myButton">click me</button></td>
+		</tr>
+	</table>
+<script>
+
+	console.dir($("#myButton").closest("tr"));
+
+	var myButton =document.getElementById("myButton");
+	
+	/*myButton.addEventListener("click", function(){ // add event handler is JS and it passes a reference from the function to the dom element
+
+		console.log("I was clicked !");
+	}); */
+	//Event handlers can cause memory leaks in JS since the function stays on  even when the button is removed from the dom, and function is not garbage collected. so we need to handle removing these like below
+	function myFunc(){
+		console.log("I was clicked !");
+	}
+	myButton.addEventListener("click", myFunc); 
+	myButton.removeEventListener("click", myFunc); 
+
+
+	//jquery
+	$("#myButton").on("click", myFunc); //register
+	$("#myButton").off("click", myFunc); //remove event handling
+;
+
+	require(["dojo/dom","dojo/dom-construct", "dojo/query","dojo/on","dojo/domReady!"],
+		function(dom, domConstruct, query,on){
+
+		var eve = on(dom.byId("myButton"),"click",myFunc);
+		console.dir(eve);
+		eve();//register
+		eve.remove(); //remove
+
+	});
+</script
+
+	</body>
+
+</html>

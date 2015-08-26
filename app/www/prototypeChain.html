@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+<head></head>
+<body>
+	
+<script>
+"use strict";
+ /*var a = {
+ 	name: "Bob";
+ };
+
+ var b= object.create(a);
+
+console.log(b.name); // Bob
+
+delete b.name; // --doesnt delete the a's property
+b.name = "scott"; //sets a new property name in b object and a.name will be bob and b.name = scott
+
+//so get method goes up the chain but set doesnt 
+*/
+
+funtion Person( firstName, lastname) {
+	this.firstName = firstName;
+	this.lastName = lastname;
+}
+
+Person.prototype.getFullName = function(){
+	return this.firstName + " " + this.lastName;
+}  //This prototype property exist only on function objects, here person's proto is function object, proto and prototype are different. then p1, p2's prototype is person.prototype
+
+
+
+var p1 = new Person("a","b"); //new operator with the function call the value of .this will be a new object we are creating
+
+var p2 = new Person("c","d"); 
+
+//p1 and p2 are different objects but both of them inherit from person
+console.dir(p);
+console.log(object.getPrototypeof(p1) === Object.getPrototypeof(p2))
+
+
+function IntuitEmployee (firstName, lastName ){
+
+}
+
+IntuitEmployee.prototype = object.create(Person.prototype);
+IntuitEmployee.prototype.constructor = IntuitEmployee;
+IntuitEmployee.prototype._super = Person;
+
+IntuitEmployee.prototype.getEmpinfo = function(){
+	return this.empId + " " + this.lastName;
+}
+
+
+</script>
+
+</body>
+</html>

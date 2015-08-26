@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+	<style>
+	#redbox{
+		float:left;
+		width: 40px;
+		height:40px;
+		background-color: red;
+	}
+	#bluebox{
+		float:right;
+		width: 70px;
+		height:70px;
+		background-color: blue;
+
+	}
+	.active{
+		border: 3px strong yellow;
+
+	}
+	</style>
+		<title></title>
+	</head>
+<body>
+	<div id="redbox" draggable="true"></div>
+	<div id="bluebox"></div>
+
+	<script>
+
+	var blueBox = document.getElementById("bluebox");
+	
+	blueBox.addEventListener("dragenter", function(e){
+		e.preventDefault();
+		blueBox.classList.add("active");
+	});
+
+
+	blueBox.addEventListener("dragleave", function(e){
+		e.preventDefault();
+		blueBox.classList.remove("active");
+	});
+
+
+	document.addEventListener("dragstart",function(e){
+		e.dataTransfer.setData("dragId", e.target.id);
+		console.dir(e.dataTransfer);
+	});
+
+	document.addEventListener("dragover",function(e){
+		e.preventDefault();
+	});
+
+	document.addEventListener("drop",function(e){
+		e.preventDefault();
+		blueBox.classList.remove("active");
+		var dragElement = document.getElementById(e.dataTransfer.getData("dragId"));
+		var dropElement = e.target;
+		dropElement.appendChild(dragElement);
+	});
+
+	</script>
+</body>
+
+</html>

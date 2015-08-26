@@ -1,0 +1,154 @@
+<html>
+
+<head>
+	<script src="libs/jquery/dist/jquery.js"></script>
+	<script src = "libs/dojo/dojo-config.js"></script>
+	<script src = "libs/dojo/dojo.js"></script>	
+
+</head>
+<body>
+
+<div id="newsFlash">News Flash: If you own stocks, you are not quite broke.</div>
+
+<div class="newsFlash2" class="new-story">News Flash: If you own stocks, you are not quite broke.</div>
+
+
+<div id="placeHolder">
+	<div id="divider"></div>
+</div>
+
+<div>
+	<h1>Market crash!</h1>
+	News Flash : Check your stocks!
+	<small>dont worry</small>
+</div>
+
+<ul>
+<li>item1</li>
+<li>item2</li>
+<li>item3</li>
+<li>item4</li>
+</ul>
+
+
+<script>
+
+var domElement = document.getElementById("newsFlash"); //Dom API way of doing it
+console.dir(domElement);
+
+
+var domElement4 = document.getElementsByClassName("new-story"); //Dom API way of doing it
+console.dir(domElement4);
+
+
+var divElement = $("#newsFlash"); //jquery way
+console.dir(divElement[0]);
+
+var divElement5 = $("div"); //another jquery approach
+console.dir(divElement5[0]);
+
+var divElement8 = $(".new-story"); //another jquery approach
+console.dir(divElement8);
+
+var divElement9 = $("div>h1"); //another jquery approach
+console.dir(divElement9[0]);
+
+
+var domElement2 = document.querySelector("#newsFlash"); //newer Dom API way of doing it allows us to use css selector engine to query
+//jquery underneath uses this queryselector as well.
+//A lot of jquery functionality has been added to the browser DOM apis
+console.dir(domElement2);
+
+var domElement6 = document.querySelectorAll("div"); 
+console.dir(domElement6[0]);// another dom api way
+
+
+//Dojo - AMD way of loading modules using require
+require(["dojo/dom","dojo/dom-construct","dojo/domReady!"],
+	function(dom, domConstruct){
+		var divElement3 = dom.byId("newsFlash");
+		console.dir(divElement3);
+	});
+
+//Dojo - one more approach
+require(["dojo/dom","dojo/dom-construct", "dojo/query","dojo/domReady!"],
+	function(dom, domConstruct, query){
+
+		console.dir(arguments); // best way to debug what params are passed in in any JS.
+
+		var divElement7 = query("#newsFlash"); 
+		console.dir(divElement7[0]);  
+	});
+
+
+//create dom element
+
+var newDomElement = document.createElement("div");
+newDomElement.innerHtml = "Some content structure!";
+document.getElementById("placeHolder").appendChild(newDomElement);
+
+//other methods of doing this - insertbefore, replaceChild ...
+
+/*
+var liNodes = document.querySelectorAll("li");
+for(){
+	liNodes[x].appendChild(domElement); -- this doesnt work ..it adds only at the end of the ul to the last li, jquery clones the items and adds them, here since we are not cloning everytime we iterate over li, the reference is wiped off from previous li to the dom element.
+}
+*/
+
+console.dir(newDomElement);
+
+
+//Jquery
+
+var newDomElement2 =  $("<div>"); //jquery when we put the angle brackets ..it creates rather than select.
+newDomElement2.html("Some content structure!!!")
+$("#placeHolder").append(newDomElement2);
+
+//$("#divider").replaceWith(newDomElement2)
+//$("#divider").unwrap().wrap("<section></section") -- removes the parent tag placeholder and replaces with section tag
+
+$("li").append(newDomElement2); // this actually clones the newDomElement2[0] and copies it, becuase in dom we can only point to one element once
+
+console.dir(newDomElement2[0]);
+
+
+
+var newDomElement2b =  $("<div>content here <br/> content more </div>"); //jquery when we put the angle brackets ..it creates rather than select.
+console.dir(newDomElement2b[0]); //snippet of html added as child nodes on the div
+
+
+
+
+$(function() {
+	console.log("dom loaded"); //this is a jquery way of document ready or content loaded.
+});
+
+
+//Dojo - create
+
+require(["dojo/dom","dojo/dom-construct", "dojo/query","dojo/domReady!"],
+	function(dom, domConstruct, query){
+	var newDomElement3 = domConstruct.create("div");
+	console.dir(newDomElement3); 
+
+	var newDomElement3b = domConstruct.toDom("<div>content here <br/> content more</div>");
+	console.dir(newDomElement3b);  //dojos create html snippet 
+
+	var newDomElement3c = domConstruct.create("div", {
+		innerHTML: "something goes here"
+	},dom.byId("placeHolder"));
+	console.dir(newDomElement3c); 
+	// or we can do - domconstruct.place(newDomElement3c, dom.byId("placeHolder"));
+	// domconstruct.place(newDomElement3c, dom.byId("divider"),before);
+	// domconstruct.place(newDomElement3c, dom.byId("placeholder"),first); -- first child of the placeholder
+
+
+
+});
+
+</script>
+
+
+</body>
+</html>

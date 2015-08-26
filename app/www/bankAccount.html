@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+<head></head>
+<body>
+	
+<script>
+
+function account(id,balance){
+	this.id = id;
+	this.balance = balance;
+}
+
+account.prototype.addTransaction = function(transAmount, type){
+	
+	if (type === "minus") {
+		 this.balance = this.balance - transAmount;
+	} else {
+		 this.balance = this.balance + transAmount;
+	}
+} 
+
+
+
+
+function checkingAc (id,balance,countTrans){
+	this.countTrans = countTrans;
+	checkingAc.prototype._super.call(this,id,balance);
+
+}
+
+checkingAc.prototype = Object.create(account.prototype);
+checkingAc.prototype.constructor = checkingAc;
+checkingAc.prototype._super = account;
+
+
+function savingsAc(id,balance,countTrans){
+	this.countTrans = countTrans;
+	savingsAc.prototype._super.call(this,id,balance);
+}
+
+savingsAc.prototype = Object.create(account.prototype);
+savingsAc.prototype.constructor = savingsAc;
+savingsAc.prototype._super = account;
+
+savingsAc.prototype.limitDebitTransaction = function(amount,type){
+
+	if(type === "minus"){
+		if(this.countTrans > 6) {
+			console.log ("Too many");
+		} else {
+			this.addTransaction(amount, type);
+			this.countTrans++;
+		}
+	} else {
+		this.addTransaction(amount, type);
+	}
+}
+
+var saving1Ac = new savingsAc ("savingdAcOfDeepthi", 1000,1);
+console.log(saving1Ac.balance);
+saving1Ac.limitDebitTransaction(10,"minus");
+saving1Ac.limitDebitTransaction(10,"minus");
+saving1Ac.limitDebitTransaction(10,"minus");
+saving1Ac.limitDebitTransaction(10,"minus");
+saving1Ac.limitDebitTransaction(10,"minus");
+saving1Ac.limitDebitTransaction(10,"minus");
+console.log(saving1Ac.balance);
+
+saving1Ac.limitDebitTransaction(10,"minus");
+saving1Ac.limitDebitTransaction(10,"minus");
+console.log(saving1Ac.balance);
+
+console.dir(account);
+console.dir(checkingAc);
+console.dir(savingsAc);
+
+</script>
+</body>
+</html>

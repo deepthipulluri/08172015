@@ -1,0 +1,43 @@
+<html>
+	<head>
+	</head>
+	<body>
+	<script>	
+
+		var x=0, y=0, z=0,zz=0, funcs = [], funcs2 = [];
+
+		for(;z<5;z++){
+			funcs2.push(function(){
+				console.log("z:" + z);
+			});
+		}
+		for(;zz<5;zz++){
+			funcs2[zz](); //prints 5 five times
+		}
+
+// How to Fix this
+
+		for(;x<5;x++){
+
+			//Immediately invoked function expression - If the line code starts with ( and then function and ends with () its immediately 
+			//invoked --- called iffy
+			(function(){
+				var tt = x;
+				funcs.push(function(){
+					console.log(tt);
+				});
+
+			})();
+
+		}
+
+		for(;y<5;y++){
+		 	funcs[y](); //prints 0,1,2,3,4
+		}
+
+// This can be fixed better using prortype inheritences		
+
+</script>
+	</body>
+
+</html>

@@ -1,0 +1,36 @@
+/* --Flex box styles
+ div{
+ 	top:0;
+ 	left:0;
+ 	right:0;
+ 	bottom:0;
+ 	position:absolute;
+ 	display:flex;
+ 	flex-direction: column;
+ }
+
+
+header{
+	flex-grow:1;
+	background-color:white;
+	color:black;
+}
+
+footer{
+		flex-grow:1;
+	background-color:#757575;
+}
+
+
+ article{
+	flex-grow: 5;
+	display:flex;
+	flex-direction: row;
+}
+
+section{
+	flex-grow: 8;
+}
+aside{
+ 	flex-grow: 1;
+ } -- */

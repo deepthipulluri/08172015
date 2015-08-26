@@ -1,0 +1,210 @@
+<html>
+<head></head>
+
+<body>
+<script>
+
+	window.Intuit = (function() {
+		
+		function inherits(parent, child){  //function to setup prototype inheritence.
+			child.prototype = Object.create(parent.prototype);
+			child.prototype.constructor = child;
+			child.prototype._super = parent;
+		}
+
+		var intuit = {};
+		
+		function extend(superEntity,options){ 
+
+		 	//internal extend function which calls inherits to set prototype chain,calls the super constructor to set the propertys, and also for the subclass it creates an extend function closure so that the entity could now be extended
+
+		 	var defaults = {};
+		 	var initialize = null;
+
+		 	if(options && options.defaults){
+		 		defaults = options.defaults; // instantiating the defaults 
+		 	}
+
+		 	if(options && options.initialize){
+		 		initialize = options.initialize;
+		 		delete options.initialize;
+		 	}
+
+			function Entity(options){
+				if(!options){
+					options = {};
+				}
+				for(var prop in defaults){
+					if(!options.hasOwnProperty(prop)){ //if a property doesnt have a value then set default
+						options[prop] = defaults[prop];
+					}
+				}
+				this.attributes = options;
+				Entity.prototype._super.call(this,options);  //calls super constructor with options to be processed 
+				if(initialize) {
+					initialize.call(this);
+				}
+			}
+
+			inherits(superEntity,Entity); // sets the prototype chanin
+
+			for (var prop in options){
+				Entity.prototype[prop] = options[prop];
+			}  	// think of these as setters of props in the child function object
+			Entity.extend = function(options){
+				return extend(Entity,options) // extend closure so that another entity can extend this entity
+			};
+			return Entity;
+
+		}
+
+		Model = function(options){
+			this.attributes = options || {};
+		};
+
+		inherits(Events,Model);
+
+		Model.prototype.get = function(propName){
+			return this.attributes[propName];
+		};
+
+
+		Model.prototype.set = function(propName,propvalue){
+			var eventData = {};
+			eventData[propName] = {
+				oldValue: this.attributes[propName],
+				newValue: propvalue 
+			};
+			this.trigger("change",eventData);
+			this.attributes[propName] = propvalue;
+		};
+					
+		Model.extend = function(options){
+			return extend(Model,options);
+		};
+
+		intuit.Model = Model;
+
+		function collection(options){
+			this.models = options || [];
+		};
+
+		inherits(Events,collection);
+
+		collection.prototype.add = function(model){
+			this.models.push(model);
+		};
+
+		collection.prototype.forEach = function(fn) {
+			this.models.forEach(fn);
+		};
+
+		collection.extend = function (options){
+			return extend(collection,options);
+		};
+
+		intuit.collection = collection;
+
+
+		function Events(){
+
+		};
+
+		Events.prototype.trigger = function(eventName, eventData) {
+			if (this.events && this.events[eventName]) {
+				this.events[eventName].forEach(function (eventHandler) {
+					eventHandler(eventData);
+				});
+			}
+		};
+		
+		Events.prototype.on = function(eventName, eventHandler) {
+			if (!this.events) {
+				this.events = {};
+			}
+			if (!this.events[eventName]) {
+				this.events[eventName] = [];
+			}
+			this.events[eventName].push(eventHandler);
+		};
+
+
+		return intuit;
+	
+	})();
+
+	var Person = Intuit.Model.extend({
+		initialize : function(){
+			this.set("addresses",[]);
+		},
+		/*defaults: {
+			address : []
+		},*/ //if we set defaults like this, its copy by reference for the object, all the new child objects will have same address array
+		//instead implement initialize
+		addAddress: function(street,city,state,zipcode){
+			this.street = street;
+			this.city = city;
+			this.state = state;
+			this.zipcode = zipcode;
+		},
+		getFullName: function(){
+			return this.get("firstName") + " " + this.get("lastName"); 
+		}
+	});
+
+	var p = new Person({
+		firstName: "Bob",
+		lastName : "smith"
+	});
+	console.log(p.getFullName());
+
+	var intuitEmployee = Person.extend ({
+		defaults:{
+			firstName:"Deepthi",
+			lastName:"Pulluri",
+			age: 32,
+			empid: 12
+
+		},
+		getEmpInfo: function(){
+			return this.get("firstName") + " " + this.get("lastName") + " " + this.get("empid") ; 
+		}
+	});
+
+	var e = new intuitEmployee({
+		firstName: "tim",
+		lastName: "cook",
+		empid: 123
+	});
+
+	e.addAddress("122 street", "sun", "ca","94086");
+
+	console.log(e.getEmpInfo());
+
+	var f = new intuitEmployee({
+		empid: 125
+	});
+
+	f.addAddress("152 street", "mv", "ca","94043");
+
+	console.log(f.getEmpInfo());
+
+	var intuitEmployees =  Intuit.collection.extend();
+
+	var iEmps = new intuitEmployees ([e,f]);
+
+	iEmps.forEach(function(emp){
+		console.log(emp.getEmpInfo());
+	});
+
+	e.on("change",function(){
+		console.log(e.getFullName() + " changed");
+	});
+	e.set("lastName", "deep");
+
+
+
+</script>
+
+</body>
+</html>
